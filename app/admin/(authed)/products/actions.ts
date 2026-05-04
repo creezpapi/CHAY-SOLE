@@ -75,13 +75,13 @@ export async function syncShopifyProducts() {
 
   // Prune products no longer in Shopify
   const returnedShopifyIds = products.map((p) => p.shopifyId);
-  const { count: pruned } = await serviceClient
+  const { data: prunedRows } = await serviceClient
     .from('shopify_products')
     .delete()
     .not('shopify_id', 'in', '(' + returnedShopifyIds.map((id) => '"' + id + '"').join(',') + ')')
-    .select('id', { count: 'exact', head: true });
+    .select('id');
 
   revalidatePath('/admin/products');
 
-  return { ok: true, synced: products.length, pruned: pruned || 0, mocked };
+  return { ok: true, synced: products.length, pruned: prunedRows?.length || 0, mocked };
 }
