@@ -28,7 +28,7 @@ export default function AssetUpload({ creative }: { creative: Creative }) {
 
     setUploadProgress('Uploading…');
 
-    // Upload directly from browser to Supabase Storage (no size limit)
+    // Upload directly from browser to Supabase Storage (no Vercel size limit)
     const res = await fetch(result.signedUrl, {
       method: 'PUT',
       headers: { 'Content-Type': file.type },
@@ -43,7 +43,7 @@ export default function AssetUpload({ creative }: { creative: Creative }) {
 
     setUploadProgress('Saving…');
 
-    // Tell server to update the DB record
+    // Tell server to record the asset in the DB
     startTransition(async () => {
       await saveAssetRecord(creative.id, result.path!, file.type);
       setUploadProgress(null);
