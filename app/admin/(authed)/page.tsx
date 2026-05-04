@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { ChevronRight } from 'lucide-react';
 import NewCreativeButton from '@/components/admin/NewCreativeButton';
 import StatusTabs from '@/components/admin/StatusTabs';
+import ProductFilter from '@/components/admin/ProductFilter';
 import { PLATFORMS } from '@/lib/types';
 
 type Props = {
@@ -48,7 +49,7 @@ export default async function CreativesDashboard({ searchParams }: Props) {
     const { data: cp } = await supabase
       .from('creative_products')
       .select('creative_id')
-      .or(`shopify_product_id.eq.${product},snapshot_title.ilike.%${product}%`);
+      .eq('shopify_product_id', product);
     filteredIds = (cp || []).map((r) => r.creative_id);
   }
 
@@ -70,15 +71,11 @@ export default async function CreativesDashboard({ searchParams }: Props) {
     }
   }
 
-  // Product filter list (for dropdown)
+  // Product list for filter dropdown
   const { data: allProducts } = await supabase
     .from('shopify_products')
     .select('shopify_id, title')
     .order('title');
-
-  const platformLabel = platform
-    ? PLATFORMS.find((p) => p.key === platform)?.label
-    : null;
 
   return (
     <div>
@@ -97,44 +94,24 @@ export default async function CreativesDashboard({ searchParams }: Props) {
         activeProduct={product}
       />
 
-      {/* Product filter */}
+      {/* Product filter row */}
       <div className="flex items-center gap-3 mt-4 mb-2">
-        <span className="text-xs text-rv-tab-inactive">Filter by product:</span>
-        <form method="GET" className="flex-1 max-w-xs">
-          {status && <input type="hidden" name="status" value={status} />}
-          {platform && <input type="hidden" name="platform" value={platform} />}
-          <select
-            name="product"
-            defaultValue={product || ''}
-            onChange={(e) => (e.target.form as HTMLFormElement).submit()}
-            className="w-full h-8 px-3 text-xs border border-rv-gray rounded-full bg-white focus:outline-none focus:border-black transition-all duration-250"
-          >
-            <option value="">All products</option>
-            {(allProducts || []).map((p) => (
-              <option key={p.shopify_id} value={p.shopify_id}>{p.title}</option>
-            ))}
-          </select>
-        </form>
+        <span className="text-xs text-rv-tab-inactive flex-shrink-0">Filter by product:</span>
+        <div className="flex-1 max-w-xs">
+          <ProductFilter
+            products={allProducts || []}
+            activeProduct={product}
+          />
+        </div>
         {(platform || product || (status && status !== 'all')) && (
           <Link
             href="/admin"
-            className="text-xs text-rv-tab-inactive hover:text-black transition-colors"
+            className="text-xs text-rv-tab-inactive hover:text-black transition-colors flex-shrink-0"
           >
-            Clear filters
+            Clear all
           </Link>
         )}
       </div>
-
-      {/* Active filters display */}
-      {(platformLabel || product) && (
-        <div className="flex gap-2 mb-4 flex-wrap">
-          {platformLabel && (
-            <span className="h-6 px-3 rounded-full bg-black text-white text-xs flex items-center gap-1">
-              {platformLabel}
-            </span>
-          )}
-        </div>
-      )}
 
       <div className="mt-2">
         {creatives.length === 0 ? (
@@ -169,7 +146,10 @@ export default async function CreativesDashboard({ searchParams }: Props) {
                         {creative.platforms.map((pk: string) => {
                           const pl = PLATFORMS.find((p) => p.key === pk);
                           return (
-                            <span key={pk} className="h-5 px-2 rounded-full bg-rv-gray text-rv-tab-inactive text-xs flex items-center">
+                            <span
+                              key={pk}
+                              className="h-5 px-2 rounded-full bg-rv-gray text-rv-tab-inactive text-xs flex items-center"
+                            >
                               {pl?.label || pk}
                             </span>
                           );
