@@ -62,7 +62,7 @@ export default function ProductPickerModal({ creativeId, alreadyTaggedIds, onClo
       .then((data) => {
         setProducts(data.products || []);
         setFiltered(data.products || []);
-        const types = [...new Set((data.products || []).map((p: Product) => p.product_type).filter(Boolean))].sort() as string[];
+        const types = Array.from(new Set((data.products || []).map((p: Product) => p.product_type).filter(Boolean))).sort() as string[];
         setProductTypes(types);
       })
       .catch(console.error);
