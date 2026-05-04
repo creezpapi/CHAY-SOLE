@@ -91,7 +91,7 @@ export default function ProductPickerModal({ creativeId, alreadyTaggedTitles, on
 
   return (
           <Modal onClose={onClose} wide>
-                <h2 className="text-lg font-medium mb-4">Add products</h2>h2>
+                <h2 className="text-lg font-medium mb-4">Add products</h2>
                 <div className="flex flex-wrap gap-3 mb-4">
                         <div className="relative flex-1 min-w-48">
                                   <Search size={14} strokeWidth={1.6} className="absolute left-3 top-1/2 -translate-y-1/2 text-rv-tab-inactive" />
@@ -102,13 +102,13 @@ export default function ProductPickerModal({ creativeId, alreadyTaggedTitles, on
                                                   placeholder="Search products..."
                                                   className="w-full h-9 pl-8 pr-4 text-sm border border-rv-gray rounded-full focus:outline-none focus:border-black transition-all duration-250"
                                                 />
-                        </div>div>
-                </div>div>
+                        </div>
+                </div>
                 <div className="overflow-y-auto max-h-96 border border-rv-gray rounded-2xl divide-y divide-rv-gray">
                     {filtered.length === 0 && (
                         <div className="p-8 text-center text-sm text-rv-tab-inactive">
                                     No products in library yet.
-                        </div>div>
+                        </div>
                         )}
                     {filtered.map((product) => {
                         const isAlreadyTagged = alreadyTaggedTitles.includes(product.name);
@@ -123,33 +123,33 @@ export default function ProductPickerModal({ creativeId, alreadyTaggedTitles, on
                                                           {product.image_url && (
                                                                               <img src={product.image_url} alt="" className="w-full h-full object-cover" />
                                                                             )}
-                                                      </div>div>
+                                                      </div>
                                                       <div className="flex-1 min-w-0">
-                                                                      <p className="text-sm font-medium">{product.name}</p>p>
-                                                          {isAlreadyTagged && <p className="text-xs text-rv-tab-inactive">already tagged</p>p>}
-                                                      </div>div>
+                                                                      <p className="text-sm font-medium">{product.name}</p>
+                                                          {isAlreadyTagged && <p className="text-xs text-rv-tab-inactive">already tagged</p>}
+                                                      </div>
                                             {!isAlreadyTagged && (
                                                                             <div className={'h-5 w-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 ' + (isSelected ? 'border-black bg-black' : 'border-rv-gray')}>
                                                                                 {isSelected && <Check size={12} strokeWidth={2} className="text-white" />}
-                                                                            </div>div>
+                                                                            </div>
                                                       )}
-                                        </div>div>
+                                        </div>
                                       );
           })}
-                </div>div>
+                </div>
                 <div className="mt-6 flex items-center justify-between pt-4 border-t border-rv-gray">
-                        <span className="text-sm text-rv-tab-inactive">{selCount} selected</span>span>
+                        <span className="text-sm text-rv-tab-inactive">{selCount} selected</span>
                         <div className="flex gap-3">
-                                  <button onClick={onClose} className="h-9 px-4 rounded-full text-sm text-rv-tab-inactive hover:text-black transition-all duration-250">Cancel</button>button>
+                                  <button onClick={onClose} className="h-9 px-4 rounded-full text-sm text-rv-tab-inactive hover:text-black transition-all duration-250">Cancel</button>
                                   <button
                                                   onClick={handleAttach}
                                                   disabled={selCount === 0 || loading}
                                                   className="h-9 px-6 rounded-full bg-black text-white text-sm font-medium transition-all duration-250 active:scale-95 disabled:opacity-40"
                                                 >
                                       {loading ? 'Attaching...' : 'Attach' + (selCount > 0 ? ' ' + selCount : '')}
-                                  </button>button>
-                        </div>div>
-                </div>div>
-          </Modal>Modal>
+                                  </button>
+                        </div>
+                </div>
+          </Modal>
         );
-}</Modal>
+        }
