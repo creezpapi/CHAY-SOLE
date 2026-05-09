@@ -43,12 +43,16 @@ export async function saveProductImageRecord(id: string, path: string) {
   return { publicUrl };
 }
 
-export async function createManualProduct(name: string, productLink: string) {
+export async function createManualProduct(name: string, productLink: string, dropTag?: string) {
   await requireAdmin();
   const serviceClient = createServiceClient();
   const { data, error } = await serviceClient
     .from('manual_products')
-    .insert({ name: name.trim(), product_link: productLink.trim() || null })
+    .insert({
+      name: name.trim(),
+      product_link: productLink.trim() || null,
+      drop_tag: dropTag || null,
+    })
     .select('id')
     .single();
   if (error) throw error;
@@ -59,7 +63,6 @@ export async function createManualProduct(name: string, productLink: string) {
 export async function deleteManualProduct(id: string) {
   await requireAdmin();
   const serviceClient = createServiceClient();
-  // Delete image from storage if exists
   const { data: product } = await serviceClient
     .from('manual_products')
     .select('image_path')
