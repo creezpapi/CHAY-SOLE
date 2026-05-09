@@ -1,4 +1,4 @@
--- re-vice-creatives database schema
+-- CHAY SOLE database schema
 -- Idempotent — safe to re-run
 
 create extension if not exists "uuid-ossp";
@@ -11,7 +11,7 @@ create table if not exists public.admins (
 );
 
 -- Seed first admin
-insert into public.admins (email) values ('beau@re-vice.com') on conflict (email) do nothing;
+insert into public.admins (email) values ('beau@chay-sole.com') on conflict (email) do nothing;
 
 -- Creatives
 create table if not exists public.creatives (
