@@ -9,10 +9,13 @@ import {
   saveProductImageRecord,
 } from '@/app/admin/(authed)/products/actions';
 
+const DROP_TAGS = ['DROP 1', 'DROP 2', 'DROP 3', 'DROP 4', 'DROP 5'];
+
 export default function AddProductModal() {
   const [open, setOpen] = useState(false);
   const [name, setName] = useState('');
   const [productLink, setProductLink] = useState('');
+  const [dropTag, setDropTag] = useState('');
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -23,6 +26,7 @@ export default function AddProductModal() {
   function reset() {
     setName('');
     setProductLink('');
+    setDropTag('');
     setImageFile(null);
     setPreview(null);
     setError(null);
@@ -48,10 +52,8 @@ export default function AddProductModal() {
     setLoading(true);
     setError(null);
     try {
-      // 1. Create product record
-      const { id } = await createManualProduct(name, productLink);
+      const { id } = await createManualProduct(name, productLink, dropTag);
 
-      // 2. Upload image if provided
       if (imageFile) {
         const { signedUrl, path } = await getSignedProductImageUploadUrl(id, imageFile.name);
         const res: Response = await fetch(signedUrl, {
@@ -83,7 +85,7 @@ export default function AddProductModal() {
 
       {open && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-          <div className="rounded-2xl bg-white p-6 shadow-lg w-full max-w-md mx-4">
+          <div className="rounded-2xl bg-white p-6 shadow-lg w-full max-w-md mx-4 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-5">
               <h2 className="text-lg font-medium">Add product</h2>
               <button
@@ -95,7 +97,6 @@ export default function AddProductModal() {
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4">
-              {/* Product name */}
               <div>
                 <label className="block text-xs font-medium mb-1.5">Product name *</label>
                 <input
@@ -108,7 +109,6 @@ export default function AddProductModal() {
                 />
               </div>
 
-              {/* Product link */}
               <div>
                 <label className="block text-xs font-medium mb-1.5">Product link (optional)</label>
                 <input
@@ -121,7 +121,33 @@ export default function AddProductModal() {
                 />
               </div>
 
-              {/* Image upload */}
+              <div>
+                <label className="block text-xs font-medium mb-2">Drop tag</label>
+                <div className="flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setDropTag('')}
+                    disabled={loading}
+                    className={'h-8 px-3 rounded-full text-xs font-medium transition-all duration-250 active:scale-95 ' +
+                      (!dropTag ? 'bg-black text-white' : 'bg-rv-gray text-rv-tab-inactive hover:text-black')}
+                  >
+                    None
+                  </button>
+                  {DROP_TAGS.map((tag) => (
+                    <button
+                      key={tag}
+                      type="button"
+                      onClick={() => setDropTag(dropTag === tag ? '' : tag)}
+                      disabled={loading}
+                      className={'h-8 px-3 rounded-full text-xs font-medium transition-all duration-250 active:scale-95 ' +
+                        (dropTag === tag ? 'bg-amber-400 text-black' : 'bg-rv-gray text-rv-tab-inactive hover:text-black')}
+                    >
+                      {tag}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
               <div>
                 <label className="block text-xs font-medium mb-1.5">Product image (optional)</label>
                 {preview ? (
