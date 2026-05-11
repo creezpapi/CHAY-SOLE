@@ -1,12 +1,12 @@
 'use server';
 import { revalidatePath } from 'next/cache';
-import { createClient } from '@/lib/supabase/server';
+import { createServiceClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 
 export async function createCreative(formData: FormData) {
   const title = (formData.get('title') as string)?.trim();
   if (!title) return;
-  const supabase = await createClient();
+  const supabase = createServiceClient();
   const { data, error } = await supabase
     .from('creatives')
     .insert({ title, status: 'ready_to_launch' })
@@ -18,7 +18,7 @@ export async function createCreative(formData: FormData) {
 }
 
 export async function deleteCreative(id: string) {
-  const supabase = await createClient();
+  const supabase = createServiceClient();
   await supabase.from('creatives').delete().eq('id', id);
   revalidatePath('/admin');
   redirect('/admin');
