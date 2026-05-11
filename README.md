@@ -1,38 +1,34 @@
-# CHAY SOLE
+# CHAY SOLE Admin
 
-Internal admin tool for the CHAY SOLE brand. A library of ad creatives (image/video/copy assets) where each creative can be tagged with products from CHAY SOLE DROPS.
+Live site: https://chay-sole.vercel.app
+
+## What's New (Migration 003)
+
+> **Before redeploying: run `supabase/migrations/003_features_drop_tasks_influencer_packages.sql` in the Supabase SQL Editor.**
+
+Five features were added in this release:
+
+1. **Product form** — Drop Name, Drop Date, Description, Talking Points, and an Affiliate Links repeater (URL + code pairs) were added to the Add/Edit Product form. Product tiles in CHAY SOLE DROPS are now clickable and open a detail modal with a pencil-icon Edit toggle.
+
+2. **Creatives page** — existing add-creative flow verified working (products storage bucket + RLS policies already in place).
+
+3. **Tasks page** (`/admin/tasks`) — manage a task list (title, assignee, due date, completed toggle) and a brand calendar (month grid view; click a day to add/edit/delete entries).
+
+4. **Influencer Marketing page** (`/admin/influencer-marketing`) — Organic Collab and Paid Collab tabs with per-influencer status pills; influencer profile modal with Shipping Info block, Links & Notes block, and a Ready To Ship button that snapshots the influencer into the Package Tracker.
+
+5. **Package Tracker page** (`/admin/package-tracker`) — three blocks: Ready To Ship → Shipped (enter tracking URL) → Delivered. Automatically updates the parent influencer's status when a shipment transitions.
 
 ## Stack
 
-- Next.js 14 (App Router, TypeScript strict)
-- - Supabase (auth, database, storage)
-  - - Tailwind CSS
-    - - Shopify Storefront API
-     
-      - ## Setup
-     
-      - 1. Clone the repo
-        2. 2. Copy `.env.local.example` to `.env.local` and fill in values
-           3. 3. Run `npm install`
-              4. 4. Run `npm run dev`
-                
-                 5. ## Supabase Setup
-                
-                 6. 1. Create a new Supabase project
-                    2. 2. Run `supabase/schema.sql` in the SQL editor
-                       3. 3. Create a storage bucket named `creatives` (public)
-                          4. 4. Create an auth user with your email
-                             5. 5. Ensure your email is in the `admins` table
-                               
-                                6. ## Shopify Setup (optional)
-                               
-                                7. Without Shopify env vars, the app uses mock product data.
-                               
-                                8. 1. Install the Shopify Headless sales channel
-                                   2. 2. Create a Storefront access token
-                                      3. 3. Add `SHOPIFY_STORE_DOMAIN`, `SHOPIFY_STOREFRONT_ACCESS_TOKEN`, `SHOPIFY_STOREFRONT_API_VERSION` to env vars
-                                         4. 4. Click "Sync products from Shopify" in the app
-                                           
-                                            5. ## Deployment
-                                           
-                                            6. Deploy to Vercel. Add all env vars from `.env.local.example` to the Vercel project settings.
+- Next.js 14 (App Router)
+- Supabase (auth + postgres + storage)
+- Tailwind CSS
+- Vercel
+
+## Environment Variables
+
+```
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+SUPABASE_SERVICE_ROLE_KEY=
+```
