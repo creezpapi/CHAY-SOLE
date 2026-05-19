@@ -15,6 +15,7 @@ const navLinks = [
 { href: '/admin/influencer-marketing', label: 'Influencer Marketing' },
 { href: '/admin/package-tracker', label: 'Package Tracker' },
 { href: '/admin/va-workflows', label: 'VA Workflows' },
+{ href: '/admin/cost-tracker', label: 'Cost Tracker' },
 ];
 
 return (
